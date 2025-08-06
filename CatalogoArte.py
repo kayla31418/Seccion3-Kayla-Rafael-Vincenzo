@@ -1,7 +1,10 @@
 class CatalogoArte:
     def __init__(self):
-        pass
-    
+        self.obras = []
+        self.artistas = []
+        self.departamentos = []
+
+
     def cargar_datos(self):
         pass
 
