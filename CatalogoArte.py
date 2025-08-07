@@ -71,10 +71,84 @@ class CatalogoArte:
 
 
     def buscar_por_departamento(self):
-        pass
+        print('< BÚSQUEDA DE OBRAS POR DEPARTAMENTO >')
+
+        dptos_disponibles = [] #Lista de nombres de departamentos
+        for departamento in self.departamentos:
+            if departamento.nombre not in dptos_disponibles:
+                dptos_disponibles.append(departamento.nombre)
+
+        num = 1
+        for departamento in dptos_disponibles:
+            print(f'{num}) {departamento.upper()}')
+            num +=1
+        
+        print(f'{num}) OTROS DEPARTAMENTOS/OBRAS NO CLASIFICADAS')
+
+        x = input('>> Escriba el número de la opción que prefiera: ')
+        while not x.isnumeric() or int(x) not in range(1, num+1):
+            print('>> Inválido')
+            x = input('>> Escriba el número de la opción que prefiera: ')
+
+        contador = 0
+        print('< LISTADO DE OBRAS ENCONTRADAS >')
+        if int(x) == num:
+            for obra in self.obras:
+                if obra.departamento not in dptos_disponibles:
+                    obra.mostrar()
+                    contador +=1
+        else:
+            seleccion = dptos_disponibles[int(x)-1]
+            for obra in self.obras:
+                if obra.departamento == seleccion:
+                    obra.mostrar()
+                    contador +=1
+        
+        if contador == 0:
+            print('No se han encontrado obras que coincidan con su selección...')
+        else:
+            print(f'\nSe encontraron {contador} coincidencias!')
+
 
     def buscar_por_nacionalidad(self):
-        pass
+        print('< BÚSQUEDA DE OBRAS POR NACIONALIDAD DEL ARTISTA >')
+
+        nac_disponibles = [] #Lista de nombres de departamentos
+        for artista in self.artistas:
+            if artista.nacionalidad not in nac_disponibles:
+                nac_disponibles.append(artista.nacionalidad)
+
+        num = 1
+        for nacionalidad in nac_disponibles:
+            print(f'{num}) {nacionalidad.upper()}')
+            num +=1
+        
+        print(f'{num}) OTRAS NACIONALIDADES/OBRAS NO CLASIFICADAS')
+
+        x = input('>> Escriba el número de la opción que prefiera: ')
+        while not x.isnumeric() or int(x) not in range(1, num+1):
+            print('>> Inválido')
+            x = input('>> Escriba el número de la opción que prefiera: ')
+
+        contador = 0
+        print('< LISTADO DE OBRAS ENCONTRADAS >')
+        if int(x) == num:
+            for obra in self.obras:
+                if obra.artista.nacionalidad not in nac_disponibles:
+                    obra.mostrar()
+                    contador +=1
+        else:
+            seleccion = nac_disponibles[int(x)-1]
+            for obra in self.obras:
+                if obra.artista.nacionalidad == seleccion:
+                    obra.mostrar()
+                    contador +=1
+            
+        
+        if contador == 0:
+            print('No se han encontrado obras que coincidan con su selección...')
+        else:
+            print(f'\nSe encontraron {contador} coincidencias!')
 
     def buscar_por_nombre_autor(self):
         pass
@@ -87,9 +161,9 @@ class CatalogoArte:
         self.cargar_datos()
         print('Finalizada Carga de Datos...')
 
-        print('< CATÁLOGO DE ARTE - MUSEO METROPOLITANO DE ARTE >')
+        print('\n< CATÁLOGO DE ARTE - MUSEO METROPOLITANO DE ARTE >')
         while True:
-            print('>> MENÚ INICIAL <<')
+            print('\n>> MENÚ INICIAL <<')
             print('1. Buscar Obras por Departamento')
             print('2. Buscar Obras por Nacionalidad')
             print('3. Buscar Obras por Nombre del Autor')
@@ -109,3 +183,5 @@ class CatalogoArte:
             elif x == '5':
                 print('>> Gracias por visitarnos. Vuelva pronto')
                 break
+            else:
+                print('>> Inválido')
