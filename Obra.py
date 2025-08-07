@@ -19,3 +19,6 @@ class Obra:
         print(f'- TIPO: {self.titulo}')
         print(f'- AÑO DE CREACIÓN: {self.anio_creacion}')
         self.artista.mostrar()
+    def probar_cambio(self):
+        pass
+
