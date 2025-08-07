@@ -71,7 +71,7 @@ class CatalogoArte:
 
 
     def buscar_por_departamento(self):
-        print('< BÚSQUEDA DE OBRAS POR DEPARTAMENTO >')
+        print('\n< BÚSQUEDA DE OBRAS POR DEPARTAMENTO >')
 
         dptos_disponibles = [] #Lista de nombres de departamentos
         for departamento in self.departamentos:
@@ -91,7 +91,7 @@ class CatalogoArte:
             x = input('>> Escriba el número de la opción que prefiera: ')
 
         contador = 0
-        print('< LISTADO DE OBRAS ENCONTRADAS >')
+        print('\n< LISTADO DE OBRAS ENCONTRADAS >')
         if int(x) == num:
             for obra in self.obras:
                 if obra.departamento not in dptos_disponibles:
@@ -105,15 +105,15 @@ class CatalogoArte:
                     contador +=1
         
         if contador == 0:
-            print('No se han encontrado obras que coincidan con su selección...')
+            print('\nNo se han encontrado obras que coincidan con su selección...')
         else:
             print(f'\nSe encontraron {contador} coincidencias!')
-
+            self.mostrar_detalles_obra()
 
     def buscar_por_nacionalidad(self):
-        print('< BÚSQUEDA DE OBRAS POR NACIONALIDAD DEL ARTISTA >')
+        print('\n< BÚSQUEDA DE OBRAS POR NACIONALIDAD DEL ARTISTA >')
 
-        nac_disponibles = [] #Lista de nombres de departamentos
+        nac_disponibles = []
         for artista in self.artistas:
             if artista.nacionalidad not in nac_disponibles:
                 nac_disponibles.append(artista.nacionalidad)
@@ -131,7 +131,7 @@ class CatalogoArte:
             x = input('>> Escriba el número de la opción que prefiera: ')
 
         contador = 0
-        print('< LISTADO DE OBRAS ENCONTRADAS >')
+        print('\n< LISTADO DE OBRAS ENCONTRADAS >')
         if int(x) == num:
             for obra in self.obras:
                 if obra.artista.nacionalidad not in nac_disponibles:
@@ -146,29 +146,101 @@ class CatalogoArte:
             
         
         if contador == 0:
-            print('No se han encontrado obras que coincidan con su selección...')
+            print('\nNo se han encontrado obras que coincidan con su selección...')
         else:
             print(f'\nSe encontraron {contador} coincidencias!')
+            self.mostrar_detalles_obra()
 
     def buscar_por_nombre_autor(self):
-        pass
+        print('\n< BÚSQUEDA DE OBRAS POR NOMBRE DEL ARTISTA >')
+
+        nombres_disponibles = [] #Lista de nombres de departamentos
+        for artista in self.artistas:
+            if artista.nombre not in nombres_disponibles:
+                nombres_disponibles.append(artista.nombre)
+
+        num = 1
+        for nombre in nombres_disponibles:
+            print(f'{num}) {nombre.upper()}')
+            num +=1
+        
+        print(f'{num}) OTROS NOMBRES/OBRAS NO CLASIFICADAS')
+
+        x = input('>> Escriba el número de la opción que prefiera: ')
+        while not x.isnumeric() or int(x) not in range(1, num+1):
+            print('>> Inválido')
+            x = input('>> Escriba el número de la opción que prefiera: ')
+
+        contador = 0
+        print('\n< LISTADO DE OBRAS ENCONTRADAS >')
+        if int(x) == num:
+            for obra in self.obras:
+                if obra.artista.nombre not in nombres_disponibles:
+                    obra.mostrar()
+                    contador +=1
+        else:
+            seleccion = nombres_disponibles[int(x)-1]
+            for obra in self.obras:
+                if obra.artista.nombre == seleccion:
+                    obra.mostrar()
+                    contador +=1
+            
+        
+        if contador == 0:
+            print('\nNo se han encontrado obras que coincidan con su selección...')
+        else:
+            print(f'\nSe encontraron {contador} coincidencias!')
+            self.mostrar_detalles_obra()
 
     def mostrar_detalles_obra(self):
-        pass
+        print('Desea visualizar mas detalles sobre alguna de las obras?')
+        x = input('Si (s)/No (n): ')
+        while x.lower() not in ['s','n']:
+            print('>> Inválido')
+            x = input('Si (s)/No (n): ')
+
+        if x.lower() == 's':
+            print('\n< DETALLES DE LAS OBRAS >')
+            while True:
+                idx = input('Ingrese el ID de la Obra que desea visualizar: ')
+
+                while not idx.isnumeric():
+                    print('>> Inválido')
+                    idx = input('Ingrese el ID de la Obra que desea visualizar: ')
+
+                obra_seleccionada = None
+
+                for obra in self.obras:
+                    if obra.idx == int(idx):
+                        obra_seleccionada = obra
+                        break
+
+                if obra_seleccionada == None:
+                    print('El ID ingresado no coincide. Desea reintentar?')
+                    x = input('Si (s)/No (n): ')
+                    while x.lower() not in ['s','n']:
+                        print('>> Inválido')
+                        x = input('Si (s)/No (n): ')
+                    
+                    if x.lower() == 'n':
+                        break
+                else:
+                    obra_seleccionada.mostrar_detalles()
+                    break
+
 
     def inicio(self):
         print('Iniciando Carga de Datos...')
         self.cargar_datos()
         print('Finalizada Carga de Datos...')
 
-        print('\n< CATÁLOGO DE ARTE - MUSEO METROPOLITANO DE ARTE >')
         while True:
+            print('\n< CATÁLOGO DE ARTE - MUSEO METROPOLITANO DE ARTE >')
             print('\n>> MENÚ INICIAL <<')
             print('1. Buscar Obras por Departamento')
             print('2. Buscar Obras por Nacionalidad')
             print('3. Buscar Obras por Nombre del Autor')
-            print('4. Mostrar Detalles de Obras')
-            print('5. Salir del Sistema')
+            print('4. Salir del Sistema')
 
             x = input('>> Escriba el número de la opción que prefiera: ')
 
@@ -179,8 +251,6 @@ class CatalogoArte:
             elif x == '3':
                 self.buscar_por_nombre_autor()
             elif x == '4':
-                self.mostrar_detalles_obra()
-            elif x == '5':
                 print('>> Gracias por visitarnos. Vuelva pronto')
                 break
             else:
